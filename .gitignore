@@ -80,3 +80,4 @@ dmypy.json
 # VS Code
 .vscode/
 .history/
+music_mood_env/
