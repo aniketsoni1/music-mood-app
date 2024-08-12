@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Mood App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body, .container, input[type="submit"], .link-button {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Basic Styles */
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+            margin: 20px auto;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            color: #333;
+            max-height: calc(100vh - 40px);
+            position: relative;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 2em;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        label {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: block;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 1em;
+            resize: none;
+            max-height: 200px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+
+        .microphone-button, .stop-dictation-button {
+            position: absolute;
+            right: 15px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .microphone-button i, .stop-dictation-button i {
+            font-size: 30px;
+            color: #007BFF;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin: 20px 0;
+            color: #007BFF;
+            transition: all 0.3s ease;
+            font-size: 1.5em;
+            letter-spacing: 1px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        ul li {
+            background-color: #f9f9f9;
+            margin: 5px 0;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        ul li span {
+            flex-grow: 1;
+            margin-right: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .link-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .link-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Enhanced Dark Mode - Theme Circles Vertical Setup */
+        .theme-switch-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            flex-direction: row;
+        }
+
+        .theme-group {
+            display: flex;
+            flex-direction: column;
+            margin: 0 15px;
+        }
+
+        .theme-switch-container label {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .theme-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            margin: 10px 0;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .theme-circle:hover {
+            border-color: #333;
+        }
+
+        /* Specific theme colors */
+        .theme-default {
+            background-color: #f0f0f0;
+        }
+
+        .theme-dark {
+            background-color: #333;
+        }
+
+        .theme-sunset {
+            background-color: #FF8A80;
+        }
+
+        .theme-forest {
+            background-color: #004D40;
+        }
+
+        .theme-ocean {
+            background-color: #0077BE;
+        }
+
+        .theme-midnight {
+            background-color: #191970;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode h1, body.dark-mode label {
+            color: #007BFF;
+        }
+
+        input[type="submit"].dark-mode {
+            background-color: #007BFF;
+        }
+
+        .link-button.dark-mode {
+            background-color: #007BFF;
+        }
+
+        .container.dark-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Sunset Theme */
+        body.sunset-mode {
+            background-color: #FFDDC1;
+            color: #333;
+        }
+
+        .container.sunset-mode {
+            background-color: #FF8A80;
+            color: #FFF;
+        }
+
+        input[type="submit"].sunset-mode, .link-button.sunset-mode {
+            background-color: #FF5252;
+        }
+
+        /* Forest Theme */
+        body.forest-mode {
+            background-color: #E0F7FA;
+            color: #004D40;
+        }
+
+        .container.forest-mode {
+            background-color: #004D40;
+            color: #E0F7FA;
+        }
+
+        input[type="submit"].forest-mode, .link-button.forest-mode {
+            background-color: #00796B;
+        }
+
+        /* Ocean Theme */
+        body.ocean-mode {
+            background-color: #E0FFFF;
+            color: #0077BE;
+        }
+
+        .container.ocean-mode {
+            background-color: #0077BE;
+            color: #E0FFFF;
+        }
+
+        input[type="submit"].ocean-mode, .link-button.ocean-mode {
+            background-color: #0056b3;
+        }
+
+        /* Midnight Theme */
+        body.midnight-mode {
+            background-color: #191970;
+            color: #E6E6FA;
+        }
+
+        .container.midnight-mode {
+            background-color: #191970;
+            color: #E6E6FA;
+        }
+
+        input[type="submit"].midnight-mode, .link-button.midnight-mode {
+            background-color: #4B0082;
+        }
+
+        .tts-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .tts-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <div class="theme-switch-container">
+        <div class="theme-group">
+            <label>Themes</label>
+            <div class="theme-circle theme-default" data-theme="default"></div>
+            <div class="theme-circle theme-dark" data-theme="dark"></div>
+            <div class="theme-circle theme-sunset" data-theme="sunset"></div>
+        </div>
+        <div class="theme-group">
+            <label>&nbsp;</label> <!-- Non-breaking space to maintain alignment -->
+            <div class="theme-circle theme-forest" data-theme="forest"></div>
+            <div class="theme-circle theme-ocean" data-theme="ocean"></div>
+            <div class="theme-circle theme-midnight" data-theme="midnight"></div>
+        </div>
+    </div>    
+
+    <div class="container">
+        <h1>Music Mood App</h1>
+
+        <form method="POST" onsubmit="return analyzeSentimentAndFetchPlaylist();">
+            <label for="text_input">How are you feeling today?</label>
+            <div class="input-group">
+                <textarea id="text_input" name="text_input" rows="4" placeholder="Describe your mood..." maxlength="300"></textarea>
+                <button type="button" class="microphone-button" onclick="startDictation()" id="start-button">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button type="button" class="stop-dictation-button" onclick="stopDictation()" id="stop-button" style="display:none;">
+                    <i class="fas fa-microphone-slash"></i>
+                </button>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+
+        {% if mood and style %}
+            <h2>Detected Mood: {{ mood }}</h2>
+            <h2>Preferred Style: {{ style }}</h2>
+        {% endif %}
+
+        {% if recommendations %}
+            <h2>Recommended Songs:</h2>
+            <ul id="playlist">
+                {% for song in recommendations %}
+                    <li>
+                        <span>{{ song | safe }}</span>
+                        <a href="https://www.youtube.com/results?search_query={{ song | urlencode }}" target="_blank" class="link-button">Listen</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="tts-button" onclick="dictateRecommendations()">Listen to Recommendations</button>
+            <!-- More Button -->
+            <form method="POST">
+                <input type="hidden" name="text_input" value="{{ text_input }}">
+                <input type="hidden" name="more_response" value="true">
+                <button type="submit" class="more-button">More <i class="fas fa-chevron-down"></i></button>
+            </form>
+        {% else %}
+            <p>We're unable to detect your mood. Let's try again.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        let recognition;
+
+        function startDictation() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+
+                recognition.onresult = async function(e) {
+                    const voiceInput = e.results[0][0].transcript.toLowerCase();
+                    handleVoiceCommand(voiceInput);
+                    stopDictation();
+                };
+
+                recognition.onerror = function(e) {
+                    stopDictation();
+                }
+
+                document.getElementById('start-button').style.display = 'none';
+                document.getElementById('stop-button').style.display = 'inline-block';
+            }
+        }
+
+        function stopDictation() {
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+
+            document.getElementById('start-button').style.display = 'inline-block';
+            document.getElementById('stop-button').style.display = 'none';
+        }
+
+        async function handleVoiceCommand(command) {
+            if (command.includes("play")) {
+                const mood = detectMoodFromCommand(command);
+                await fetchPlaylist(mood);
+            } else if (command.includes("change to dark theme")) {
+                applyTheme("dark");
+            } else if (command.includes("tell me my mood")) {
+                alert("We are detecting your mood. Please wait.");
+            }
+        }
+
+        async function analyzeSentimentAndFetchPlaylist() {
+            const text_input = document.getElementById('text_input').value;
+            const sentimentResponse = await fetch('/analyze_sentiment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text_input: text_input })
+            });
+
+            const sentimentData = await sentimentResponse.json();
+            const mood = adjustMoodBasedOnSentiment(sentimentData.sentiment);
+            await fetchPlaylist(mood);
+            return false;
+        }
+
+        async function fetchPlaylist(mood) {
+            const response = await fetch('/generate_playlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ mood: mood })
+            });
+
+            const data = await response.json();
+            displayPlaylist(data.playlist);
+        }
+
+        function displayPlaylist(playlist) {
+            const playlistElement = document.getElementById('playlist');
+            playlistElement.innerHTML = '';
+
+            playlist.forEach(song => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${song}</span><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(song)}" target="_blank" class="link-button">Listen</a>`;
+                playlistElement.appendChild(li);
+            });
+        }
+
+        function dictateRecommendations() {
+            try {
+                const recommendations = document.getElementById('playlist').innerText;
+                const speech = new SpeechSynthesisUtterance();
+                speech.text = `Here are your recommended songs: ${recommendations}`;
+                speech.lang = "en-US";  // Set the language
+                speech.voice = window.speechSynthesis.getVoices().find(voice => voice.name === 'Google US English');  // Set voice (if available)
+                speech.pitch = 1;  // Set pitch
+                speech.rate = 1;   // Set rate of speech
+
+                window.speechSynthesis.speak(speech);
+            } catch (error) {
+                console.error("Error in dictateRecommendations:", error);
+                alert("Sorry, something went wrong with the Text-to-Speech feature.");
+            }
+        }
+
+
+        function adjustMoodBasedOnSentiment(sentiment) {
+            if (sentiment === 'negative') {
+                return 'calm';
+            } else if (sentiment === 'positive') {
+                return 'happy';
+            } else {
+                return 'neutral';
+            }
+        }
+
+        document.querySelectorAll('.theme-circle').forEach(circle => {
+            circle.addEventListener('click', function () {
+                const selectedTheme = this.getAttribute('data-theme');
+                localStorage.setItem('selectedTheme', selectedTheme);
+                applyTheme(selectedTheme);
+            });
+        });
+
+        window.addEventListener('load', function () {
+            const savedTheme = localStorage.getItem('selectedTheme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            }
+        });
+
+        function applyTheme(theme) {
+            document.body.className = '';
+            document.querySelector('.container').className = 'container';
+            document.querySelector('input[type="submit"]').className = '';
+            document.querySelectorAll('.link-button').forEach(button => {
+                button.className = 'link-button';
+            });
+
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.container').classList.add('dark-mode');
+                document.querySelector('input[type="submit"]').classList.add('dark-mode');
+                document.querySelectorAll('.link-button').forEach(button => {
+                    button.classList.add('dark-mode');
+                });
+            } else if (theme === 'sunset') {
+                document.body.classList.add('sunset-mode');
+                document.querySelector('.container').classList.add('sunset-mode');
+                document.querySelector('input[type="submit"]').classList.add('sunset-mode');
+                document.querySelectorAll('.link-button').forEach(button => {
+                    button.classList.add('sunset-mode');
+                });
+            } else if (theme === 'forest') {
+                document.body.classList.add('forest-mode');
+                document.querySelector('.container').classList.add('forest-mode');
+                document.querySelector('input[type="submit"]').classList.add('forest-mode');
+                document.querySelectorAll('.link-button').forEach(button => {
+                    button.classList.add('forest-mode');
+                });
+            } else if (theme === 'ocean') {
+                document.body.classList.add('ocean-mode');
+                document.querySelector('.container').classList.add('ocean-mode');
+                document.querySelector('input[type="submit"]').classList.add('ocean-mode');
+                document.querySelectorAll('.link-button').forEach(button => {
+                    button.classList.add('ocean-mode');
+                });
+            } else if (theme === 'midnight') {
+                document.body.classList.add('midnight-mode');
+                document.querySelector('.container').classList.add('midnight-mode');
+                document.querySelector('input[type="submit"]').classList.add('midnight-mode');
+                document.querySelectorAll('.link-button').forEach(button => {
+                    button.classList.add('midnight-mode');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
