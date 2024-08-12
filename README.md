@@ -45,9 +45,11 @@ Music Mood App is a web-based application developed for the [Gemini API Develope
  `python app.py`
  ```
 
-#Screenshots
+Screenshots
 -----------
 ### Home Page
-
+<img width="1510" alt="Screenshot 2024-08-12 at 1 30 36 PM" src="https://github.com/user-attachments/assets/b8451fa0-737a-421d-9029-64b19075b8ab">
 
 ### Response Page
+<img width="1510" alt="Screenshot 2024-08-12 at 1 32 53 PM" src="https://github.com/user-attachments/assets/c9c69af6-ed43-492e-aa9b-11ba063bf85f">
+
