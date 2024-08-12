@@ -16,6 +16,10 @@ Music Mood App is a web-based application developed for the [Gemini API Develope
 - **Librosa**: For analyzing and modifying audio files.
 - **Flask**: As the backend framework to handle requests and render HTML templates.
 
+## Text-to-Speech Feature
+
+The app includes a Text-to-Speech feature that allows users to listen to the recommended songs. This feature is implemented using the browser's built-in `SpeechSynthesis` API, which is part of the Web Speech API. The voices available for synthesis depend on the browser and operating system, and may include Google voices on certain platforms.
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
