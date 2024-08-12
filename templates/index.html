@@ -421,13 +421,26 @@
 
                 recognition.onresult = async function(e) {
                     const voiceInput = e.results[0][0].transcript.toLowerCase();
-                    handleVoiceCommand(voiceInput);
+
+                    // Set the recognized speech in the text input field
+                    document.getElementById('text_input').value = voiceInput;
+
+                    // Handle voice commands
+                    await handleVoiceCommand(voiceInput);
+
+                    // Stop dictation
                     stopDictation();
                 };
 
                 recognition.onerror = function(e) {
+                    console.error("Speech Recognition Error:", e);
                     stopDictation();
-                }
+                };
+
+                recognition.onend = function() {
+                    console.log("Speech Recognition ended.");
+                    stopDictation();
+                };
 
                 document.getElementById('start-button').style.display = 'none';
                 document.getElementById('stop-button').style.display = 'inline-block';
@@ -442,6 +455,19 @@
 
             document.getElementById('start-button').style.display = 'inline-block';
             document.getElementById('stop-button').style.display = 'none';
+        }
+
+        async function handleVoiceCommand(voiceInput) {
+            if (voiceInput.includes("play rock music")) {
+                // Example: Display a message or trigger an action
+                console.log("Playing rock music");
+                // Add logic to play rock music
+            } else if (voiceInput.includes("change theme to dark")) {
+                applyTheme("dark");
+                console.log("Theme changed to dark");
+            } else {
+                console.log("Command not recognized");
+            }
         }
 
         async function handleVoiceCommand(command) {
@@ -511,6 +537,7 @@
                 alert("Sorry, something went wrong with the Text-to-Speech feature.");
             }
         }
+
 
 
         function adjustMoodBasedOnSentiment(sentiment) {
